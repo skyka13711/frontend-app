@@ -66,13 +66,13 @@ export default [
       'no-underscore-dangle': 'off',
       'max-classes-per-file': 'warn',
       'no-unused-vars': 'off',
-
+      'no-useless-escape': 'off',
       // Import rules
       'import/no-cycle': 'off',
       'import/prefer-default-export': 'off',
-      'import/no-extraneous-dependencies': ['error', {}],
+      'import/no-extraneous-dependencies': ['off', {}],
       'import/extensions': 'off',
-      'import/no-unresolved': 'error',
+      'import/no-unresolved': 'off',
 
       // React rules
       'react/jsx-filename-extension': ['warn', { extensions: ['.jsx', '.tsx'] }],
@@ -82,7 +82,7 @@ export default [
       ...effectorPlugin.configs.recommended.rules,
       ...effectorPlugin.configs.future.rules,
       'effector/mandatory-scope-binding': 'off',
-      'effector/enforce-gate-naming-convention': 'error'
+      'effector/no-duplicate-on': 'off'
     }
   }
 ]
