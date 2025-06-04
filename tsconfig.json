@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "es2015",
+    "target": "ESNext",
+    "module": "ESNext",
     "removeComments": true,
     "strict": true,
     "noImplicitThis": false,
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
