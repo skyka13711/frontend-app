@@ -6,6 +6,13 @@ import { LuArrowRight } from 'react-icons/lu'
 import { baseInfoForm, PlumbingType } from '../../model/private'
 import { NumberField, RadioField } from '../parts'
 
+const PLUMBING_OPTIONS = [
+  { value: PlumbingType.Vertical, label: 'Вертикальная' },
+  { value: PlumbingType.Collector, label: 'Коллекторная горизонтальная' },
+  { value: PlumbingType.Standpipe, label: 'Стояковая с байпасами' },
+  { value: PlumbingType.Other, label: 'Другое' }
+]
+
 export const BaseInfoForm = memo(() => {
   const { fields, submit } = useForm(baseInfoForm)
 
@@ -56,7 +63,7 @@ export const BaseInfoForm = memo(() => {
               label="Тип разводки ХВС/ГВС"
               value={fields.plumbingType.value}
               onChange={(v) => fields.plumbingType.onChange(v)}
-              options={Object.values(PlumbingType)}
+              options={PLUMBING_OPTIONS}
               errorText={fields.plumbingType.firstError?.errorText}
             />
 

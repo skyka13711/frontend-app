@@ -1,12 +1,17 @@
 import { Field, RadioGroup } from '@chakra-ui/react'
 
+export interface RadioOption<T extends string> {
+  value: T
+  label: string
+}
+
 type Props<T extends string> = {
   isInvalid: boolean
   label: string
   value: T
   errorText?: string
   onChange: (value: T) => void
-  options: T[]
+  options: RadioOption<T>[]
 }
 
 export const RadioField = <T extends string>({ isInvalid, label, onChange, options, value, errorText }: Props<T>) => {
@@ -21,10 +26,10 @@ export const RadioField = <T extends string>({ isInvalid, label, onChange, optio
         gap={6}
       >
         {options.map((option) => (
-          <RadioGroup.Item key={option} value={option}>
+          <RadioGroup.Item key={option.value} value={option.value}>
             <RadioGroup.ItemHiddenInput />
             <RadioGroup.ItemIndicator />
-            <RadioGroup.ItemText>{option}</RadioGroup.ItemText>
+            <RadioGroup.ItemText>{option.label}</RadioGroup.ItemText>
           </RadioGroup.Item>
         ))}
       </RadioGroup.Root>
