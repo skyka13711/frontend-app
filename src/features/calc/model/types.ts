@@ -33,3 +33,11 @@ export interface AdditionalService {
   label: string
   options: ServiceOption[]
 }
+
+export interface GroupItem {
+  id: string
+  label: string
+  itemPrice: number
+  groupTotal: number
+  subGroups?: GroupItem[] | undefined
+}

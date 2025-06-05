@@ -1,12 +1,13 @@
 import { combine, createApi, createDomain, sample } from 'effector'
 import { createForm } from 'effector-forms'
 import { rules } from '@/lib/validators'
-import { BaseInfoFormFields, PlumbingType, Prices, ServiceOption } from './types'
+import { BaseInfoFormFields, GroupItem, PlumbingType, Prices, ServiceOption } from './types'
 import { additionalServiceMock, pricesMock } from './const'
 
 export const STEP_COUNT = 4 // Total number of steps in the form
 const d = createDomain('calc')
 
+// Units
 export const $step = d.store<number>(1)
 export const { nextStep, prevStep } = createApi($step, {
   nextStep: (state) => state + 1,
@@ -15,38 +16,10 @@ export const { nextStep, prevStep } = createApi($step, {
 
 export const $canGoPrev = $step.map((step) => step > 1)
 export const $isLastStep = $step.map((step) => step === STEP_COUNT)
-
 export const $prices = d.store<Prices | null>(pricesMock)
-
 export const $additionalServices = d.store(additionalServiceMock)
-
 export const $selectedAdditionalOptions = d.store<Record<string, string[]>>({})
-
 export const toggleAdditionalOption = d.event<{ groupId: string; optionId: string }>()
-
-$selectedAdditionalOptions.on(toggleAdditionalOption, (state, { groupId, optionId }) => {
-  const newState = { ...state }
-  const group = newState[groupId] || []
-  const exists = group.includes(optionId)
-  let nextGroup: string[]
-  if (exists) {
-    nextGroup = group.filter((id) => id !== optionId)
-    const removeSubThree = (id: string) => {
-      if (newState[id]) {
-        newState[id].forEach(removeSubThree)
-        delete newState[id]
-      }
-    }
-    group.forEach(removeSubThree)
-  } else {
-    nextGroup = [...group, optionId]
-  }
-  if (nextGroup.length === 0) {
-    delete newState[groupId]
-    return newState
-  }
-  return { ...newState, [groupId]: nextGroup }
-})
 
 export const baseInfoForm = createForm<BaseInfoFormFields>({
   domain: d,
@@ -74,6 +47,7 @@ export const baseInfoForm = createForm<BaseInfoFormFields>({
   }
 })
 
+// derived stores
 const $flatOptionsList = $additionalServices.map((services) => {
   const mapOptions = (option: ServiceOption): ServiceOption[] | ServiceOption => {
     if (option.subOptions) return [option, ...option.subOptions.flatMap(mapOptions)]
@@ -108,24 +82,33 @@ export const $groupCost = combine(
       if (!selectedOptions) return groupCost
       selectedOptions.forEach((id) => {
         groupCost += calcGroupCost(id)
-        groupCost += flatOptionsList.find((g) => g.id === groupId)?.price || 0
+        const item = flatOptionsList.find((g) => g.id === id)
+        groupCost += item?.price || 0
       })
       return groupCost
     }
 
-    const result = groupsId.map((groupId) => {
+    const getGroupItem = (itemId: string): GroupItem => {
+      const item = flatOptionsList.find((g) => g.id === itemId)
+      const hasChildren = additionalOptions[itemId] && additionalOptions[itemId].length > 0
       return {
-        groupId,
-        groupLabel: additionalServices.find((g) => g.id === groupId)?.label || '',
-        groupCost: calcGroupCost(groupId)
+        id: itemId,
+        label: item?.label || '',
+        itemPrice: item?.price || 0,
+        groupTotal: calcGroupCost(itemId),
+        subGroups: hasChildren ? additionalOptions[itemId]!.map(getGroupItem) : undefined
       }
-    })
+    }
 
+    const result = groupsId.map(getGroupItem)
     return result
   }
 )
 
-sample({
-  clock: baseInfoForm.formValidated,
-  target: nextStep
+export const $totalCost = $groupCost.map((groups) => {
+  if (!groups) return 0
+  return groups.reduce((total, group) => {
+    const groupTotal = group.groupTotal + group.itemPrice
+    return total + groupTotal
+  }, 0)
 })
