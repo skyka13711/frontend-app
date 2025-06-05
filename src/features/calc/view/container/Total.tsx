@@ -14,21 +14,10 @@ export const Total = memo(() => {
 
   const renderSubItem = useCallback((item: GroupItem, level = 0) => {
     const hasSubGroups = item.subGroups && item.subGroups.length > 0
-    const marginLeft = level * 4
 
     if (!hasSubGroups) {
-      // Простой элемент без подгрупп
       return (
-        <Box
-          key={item.id}
-          ml={marginLeft}
-          p={3}
-          borderRadius={8}
-          borderWidth={1}
-          borderColor="gray.200"
-          bg="gray.50"
-          mb={2}
-        >
+        <Box key={item.id} p={2} borderRadius={8} borderWidth={1} borderColor="gray.200" bg="gray.50">
           <Stack gap={1}>
             <Text fontWeight="medium" fontSize="sm" color="blue.800">
               {item.label}
@@ -44,44 +33,36 @@ export const Total = memo(() => {
       )
     }
 
-    // Элемент с подгруппами - используем аккордеон
     return (
-      <Accordion.Root key={item.id} collapsible variant="enclosed" ml={marginLeft} mb={2}>
-        <Accordion.Item value={item.id.toString()}>
-          <Accordion.ItemTrigger
-            p={3}
-            borderRadius={8}
-            bg="white"
-            borderWidth={1}
-            borderColor="gray.300"
-            _hover={{ bg: 'gray.50' }}
-          >
+      <Accordion.Root key={item.id} collapsible variant="enclosed">
+        <Accordion.Item value={item.id.toString()} pb={1}>
+          <Accordion.ItemTrigger p={2} bg="white" borderColor="gray.300" _hover={{ bg: 'gray.50' }}>
             <Stack direction="row" justify="space-between" align="center" width="100%">
               <Stack gap={1} align="flex-start">
                 <Text fontWeight="semibold" fontSize="sm" color="blue.800">
                   {item.label}
                 </Text>
-                <Stack direction="row" gap={4} fontSize="xs" color="gray.600">
+                <Stack direction="column" gap={1} fontSize="xs" color="gray.600">
                   <Text>
                     Основная услуга:{' '}
-                    <Text as="span" fontWeight="semibold">
+                    <Text as="span" textWrap={'nowrap'} fontWeight="semibold">
                       {formatCurrency(item.itemPrice)}
                     </Text>
                   </Text>
                   {item.groupTotal !== item.itemPrice && (
                     <Text>
                       Доп. услуги:{' '}
-                      <Text as="span" fontWeight="semibold">
+                      <Text as="span" textWrap={'nowrap'} fontWeight="semibold">
                         {formatCurrency(item.groupTotal - item.itemPrice)}
                       </Text>
                     </Text>
                   )}
+                  <Text fontSize="sm" textWrap={'nowrap'} fontWeight="bold" color="blue.700">
+                    {formatCurrency(item.groupTotal)}
+                  </Text>
                 </Stack>
               </Stack>
               <Stack align="flex-end" gap={0}>
-                <Text fontSize="sm" fontWeight="bold" color="blue.700">
-                  {formatCurrency(item.groupTotal)}
-                </Text>
                 <Accordion.ItemIndicator>
                   <LuChevronDown />
                 </Accordion.ItemIndicator>
@@ -89,10 +70,8 @@ export const Total = memo(() => {
             </Stack>
           </Accordion.ItemTrigger>
 
-          <Accordion.ItemContent p={3} pt={0}>
-            <Stack gap={2} ml={2}>
-              {item.subGroups?.map((subItem) => renderSubItem(subItem, level + 1))}
-            </Stack>
+          <Accordion.ItemContent pt={3} px={0}>
+            <Stack gap={4}>{item.subGroups?.map((subItem) => renderSubItem(subItem, level + 1))}</Stack>
           </Accordion.ItemContent>
         </Accordion.Item>
       </Accordion.Root>
@@ -119,22 +98,23 @@ export const Total = memo(() => {
               _hover={{ bg: 'blue.100' }}
             >
               <Stack direction="row" justify="space-between" align="center" width="100%">
-                <Text fontSize="lg" fontWeight="bold" color="blue.900">
-                  {group.label}
-                </Text>
-                <Stack direction="row" align="center" gap={3}>
+                <Stack>
+                  <Text fontSize="lg" fontWeight="bold" color="blue.900">
+                    {group.label}
+                  </Text>
                   <Text fontSize="lg" fontWeight="bold" color="blue.800">
                     {formatCurrency(group.groupTotal)}
                   </Text>
-                  <Accordion.ItemIndicator>
-                    <LuChevronDown />
-                  </Accordion.ItemIndicator>
                 </Stack>
+
+                <Accordion.ItemIndicator>
+                  <LuChevronDown />
+                </Accordion.ItemIndicator>
               </Stack>
             </Accordion.ItemTrigger>
 
             <Accordion.ItemContent p={4} bg="white">
-              <Stack gap={2}>{group.subGroups?.map((subItem) => renderSubItem(subItem, 0))}</Stack>
+              <Stack gap={4}>{group.subGroups?.map((subItem) => renderSubItem(subItem, 0))}</Stack>
             </Accordion.ItemContent>
           </Accordion.Item>
         </Accordion.Root>
