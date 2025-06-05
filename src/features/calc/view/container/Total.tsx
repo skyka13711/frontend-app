@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react'
 import { Box, Button, Stack, Text, Accordion } from '@chakra-ui/react'
-import { LuArrowRight, LuChevronDown, LuDownload } from 'react-icons/lu'
+import { LuChevronDown, LuDownload } from 'react-icons/lu'
 import { useUnit } from 'effector-react'
 
 import { StepHeader } from './StepHeader'
@@ -125,8 +125,8 @@ export const Total = memo(() => {
 
   return (
     <>
-      <StepHeader />
-      <Stack gap={4}>
+      <StepHeader title="Сохранить" />
+      <Stack gap={4} height="100%">
         {groups?.map(renderMainGroup)}
 
         <Stack

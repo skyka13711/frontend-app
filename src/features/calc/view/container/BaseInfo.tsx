@@ -25,46 +25,48 @@ export const BaseInfo = memo(() => {
 
   return (
     <>
-      <StepHeader />
-      <form onSubmit={handleSubmit}>
-        <Stack gap={5}>
-          <NumberField
-            isValid={fields.area.hasError()}
-            label="Общая жилая (продаваемая) площадь, м²"
-            value={fields.area.value}
-            onChange={(v) => fields.area.onChange(String(v))}
-            errorText={fields.area.firstError?.errorText}
-          />
-          <NumberField
-            isValid={fields.floors.hasError()}
-            label="Количество этажей"
-            value={fields.floors.value}
-            onChange={(v) => fields.floors.onChange(String(v))}
-            errorText={fields.floors.firstError?.errorText}
-          />
-          <NumberField
-            isValid={fields.sections.hasError()}
-            label="Количество секций"
-            value={fields.sections.value}
-            onChange={(v) => fields.sections.onChange(String(v))}
-            errorText={fields.sections.firstError?.errorText}
-          />
-          <NumberField
-            isValid={fields.apartments.hasError()}
-            label="Количество квартир"
-            value={fields.apartments.value}
-            onChange={(v) => fields.apartments.onChange(String(v))}
-            errorText={fields.apartments.firstError?.errorText}
-          />
+      <StepHeader title="Расчет стоимости АСУЗ" />
+      <form onSubmit={handleSubmit} style={{ height: '100%' }}>
+        <Stack height="100%" gap={5}>
+          <Stack height="100%" gap={5}>
+            <NumberField
+              isValid={fields.area.hasError()}
+              label="Общая жилая (продаваемая) площадь, м²"
+              value={fields.area.value}
+              onChange={(v) => fields.area.onChange(String(v))}
+              errorText={fields.area.firstError?.errorText}
+            />
+            <NumberField
+              isValid={fields.floors.hasError()}
+              label="Количество этажей"
+              value={fields.floors.value}
+              onChange={(v) => fields.floors.onChange(String(v))}
+              errorText={fields.floors.firstError?.errorText}
+            />
+            <NumberField
+              isValid={fields.sections.hasError()}
+              label="Количество секций"
+              value={fields.sections.value}
+              onChange={(v) => fields.sections.onChange(String(v))}
+              errorText={fields.sections.firstError?.errorText}
+            />
+            <NumberField
+              isValid={fields.apartments.hasError()}
+              label="Количество квартир"
+              value={fields.apartments.value}
+              onChange={(v) => fields.apartments.onChange(String(v))}
+              errorText={fields.apartments.firstError?.errorText}
+            />
 
-          <RadioField<PlumbingType>
-            isInvalid={fields.plumbingType.hasError()}
-            label="Тип разводки ХВС/ГВС"
-            value={fields.plumbingType.value}
-            onChange={(v) => fields.plumbingType.onChange(v)}
-            options={PLUMBING_OPTIONS}
-            errorText={fields.plumbingType.firstError?.errorText}
-          />
+            <RadioField<PlumbingType>
+              isInvalid={fields.plumbingType.hasError()}
+              label="Тип разводки ХВС/ГВС"
+              value={fields.plumbingType.value}
+              onChange={(v) => fields.plumbingType.onChange(v)}
+              options={PLUMBING_OPTIONS}
+              errorText={fields.plumbingType.firstError?.errorText}
+            />
+          </Stack>
 
           <Button size="xl" type="submit" colorPalette="blue" variant="surface">
             <Box width="100%">Продолжить</Box> <LuArrowRight />

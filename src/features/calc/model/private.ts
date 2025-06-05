@@ -15,7 +15,6 @@ export const { nextStep, prevStep } = createApi($step, {
 })
 
 export const $canGoPrev = $step.map((step) => step > 1)
-export const $isLastStep = $step.map((step) => step === STEP_COUNT)
 export const $prices = d.store<Prices | null>(pricesMock)
 export const $additionalServices = d.store(additionalServiceMock)
 export const $selectedAdditionalOptions = d.store<Record<string, string[]>>({})

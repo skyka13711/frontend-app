@@ -7,9 +7,9 @@ import { Calc } from '@/features/calc/view'
 
 export const MainPage = memo(() => {
   return (
-    <Container flexGrow={1} display="flex" flexDirection="column">
+    <Container flexGrow={1} display="flex" justifyContent="space-between" flexDirection="column">
       <Header />
-      <Box width="100%" maxWidth={520} mx={'auto'}>
+      <Box width="100%" flexGrow={1} maxWidth={520} mx={'auto'}>
         <Calc />
       </Box>
       <Footer />

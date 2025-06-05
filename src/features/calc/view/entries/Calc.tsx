@@ -11,8 +11,8 @@ export const Calc = memo(() => {
   const step = useUnit($step)
 
   return (
-    <Box shadow="lg" p={5} borderRadius={16}>
-      <Stack direction="column" gap={5}>
+    <Box height="100%" shadow="lg" p={5} borderRadius={16}>
+      <Stack direction="column" gap={5} height="100%">
         {STEPS[step - 1] || null}
       </Stack>
     </Box>

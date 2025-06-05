@@ -7,7 +7,7 @@ import '@/features/calc/model/init'
 export const App = () => {
   return (
     <Provider>
-      <Theme appearance="light">
+      <Theme display="flex" flexDirection="column" flexGrow={1} appearance="light">
         <MainPage />
       </Theme>
     </Provider>
