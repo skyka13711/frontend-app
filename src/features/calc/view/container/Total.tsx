@@ -3,10 +3,11 @@ import { Box, Button, Stack, Text, Accordion } from '@chakra-ui/react'
 import { LuChevronDown, LuDownload } from 'react-icons/lu'
 import { useUnit } from 'effector-react'
 
-import { StepHeader } from './StepHeader'
-import { $groupsCost, $totalCost, nextStep } from '../../model/private'
-import { GroupItem } from '../../model/types'
 import { formatCurrency } from '@/lib/formatCurrency'
+
+import { StepHeader } from '../parts'
+import { $groupsCost, $totalCost, nextStep, prevStep } from '../../model/private'
+import { GroupItem } from '../../model/types'
 
 export const Total = memo(() => {
   const groups = useUnit($groupsCost)
@@ -125,7 +126,7 @@ export const Total = memo(() => {
 
   return (
     <>
-      <StepHeader title="Сохранить" />
+      <StepHeader onGoBack={prevStep} title="Сохранить" />
       <Stack gap={4} height="100%">
         {groups?.map(renderMainGroup)}
 

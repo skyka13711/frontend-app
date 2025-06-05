@@ -1,9 +1,15 @@
 import { useUnit } from 'effector-react'
-import { $additionalServices, $selectedAdditionalOptions, nextStep, toggleAdditionalOption } from '../../model/private'
-import { ServiceItem } from '../parts'
-import { StepHeader } from './StepHeader'
 import { Box, Button, Stack } from '@chakra-ui/react'
 import { LuArrowRight } from 'react-icons/lu'
+
+import {
+  $additionalServices,
+  $selectedAdditionalOptions,
+  nextStep,
+  prevStep,
+  toggleAdditionalOption
+} from '../../model/private'
+import { ServiceItem, StepHeader } from '../parts'
 
 export const SetupAdditionalService = () => {
   const services = useUnit($additionalServices)
@@ -11,7 +17,7 @@ export const SetupAdditionalService = () => {
   const selectedOptions = useUnit($selectedAdditionalOptions)
   return (
     <>
-      <StepHeader title="Расчет стоимости АСУЗ" />
+      <StepHeader onGoBack={prevStep} title="Расчет стоимости АСУЗ" />
       <Stack height="100%">
         {services.map(({ id, label, options }) => {
           return (
