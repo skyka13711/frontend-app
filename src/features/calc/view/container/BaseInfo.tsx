@@ -3,7 +3,7 @@ import { useForm } from 'effector-forms'
 import React, { memo } from 'react'
 import { LuArrowRight } from 'react-icons/lu'
 
-import { baseInfoForm, prevStep } from '../../model/private'
+import { baseInfoForm } from '../../model/private'
 import { NumberField, RadioField, StepHeader } from '../parts'
 import { PlumbingType } from '../../model/types'
 
@@ -24,7 +24,7 @@ export const BaseInfo = memo(() => {
 
   return (
     <>
-      <StepHeader onGoBack={prevStep} title="Расчет стоимости АСУЗ" />
+      <StepHeader title="Расчет стоимости АСУЗ" />
       <form onSubmit={handleSubmit} style={{ height: '100%' }}>
         <Stack height="100%" gap={5}>
           <Stack height="100%" gap={5}>

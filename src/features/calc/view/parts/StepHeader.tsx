@@ -2,11 +2,9 @@ import { Button, Text } from '@chakra-ui/react'
 import { LuArrowLeft } from 'react-icons/lu'
 import { memo } from 'react'
 
-import { $canGoPrev, prevStep } from '../../model/private'
-
 type Props = {
   title: string
-  onGoBack: () => void
+  onGoBack?: () => void
 }
 
 export const StepHeader = memo(({ title, onGoBack }: Props) => {
