@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react'
-import { Box, Button, Stack, Text, List } from '@chakra-ui/react'
-import { LuArrowRight } from 'react-icons/lu'
+import { Box, Button, Stack, Text, Accordion } from '@chakra-ui/react'
+import { LuArrowRight, LuChevronDown } from 'react-icons/lu'
 import { useUnit } from 'effector-react'
 
 import { StepHeader } from './StepHeader'
@@ -12,49 +12,165 @@ export const Total = memo(() => {
   const groups = useUnit($groupsCost)
   const total = useUnit($totalCost)
 
-  const renderItem = useCallback((item: GroupItem) => {
+  const renderSubItem = useCallback((item: GroupItem, level = 0) => {
+    const hasSubGroups = item.subGroups && item.subGroups.length > 0
+    const marginLeft = level * 4
+
+    if (!hasSubGroups) {
+      // Простой элемент без подгрупп
+      return (
+        <Box
+          key={item.id}
+          ml={marginLeft}
+          p={3}
+          borderRadius={8}
+          borderWidth={1}
+          borderColor="gray.200"
+          bg="gray.50"
+          mb={2}
+        >
+          <Stack gap={1}>
+            <Text fontWeight="medium" fontSize="sm" color="blue.800">
+              {item.label}
+            </Text>
+            <Text color="gray.700" fontSize="xs">
+              Стоимость:{' '}
+              <Text as="span" fontWeight="semibold">
+                {formatCurrency(item.itemPrice)}
+              </Text>
+            </Text>
+          </Stack>
+        </Box>
+      )
+    }
+
+    // Элемент с подгруппами - используем аккордеон
     return (
-      <List.Item gap={2} key={item.id} ml={2} mb={4}>
-        <Stack gap={1}>
-          <Box fontWeight="bold">{item.label}</Box>
-          <Box>Стоимость услуги: {formatCurrency(item.itemPrice)}</Box>
-        </Stack>
-        {item.subGroups && <List.Root mt={4}>{item.subGroups.map(renderItem)}</List.Root>}
-        {item.subGroups && (
-          <>
-            <Box>Стоимость доп услуг: {formatCurrency(item.groupTotal - item.itemPrice)}</Box>
-            <Box>Общая стоимость: {formatCurrency(item.groupTotal)}</Box>
-          </>
-        )}
-      </List.Item>
+      <Accordion.Root key={item.id} collapsible variant="enclosed" ml={marginLeft} mb={2}>
+        <Accordion.Item value={item.id.toString()}>
+          <Accordion.ItemTrigger
+            p={3}
+            borderRadius={8}
+            bg="white"
+            borderWidth={1}
+            borderColor="gray.300"
+            _hover={{ bg: 'gray.50' }}
+          >
+            <Stack direction="row" justify="space-between" align="center" width="100%">
+              <Stack gap={1} align="flex-start">
+                <Text fontWeight="semibold" fontSize="sm" color="blue.800">
+                  {item.label}
+                </Text>
+                <Stack direction="row" gap={4} fontSize="xs" color="gray.600">
+                  <Text>
+                    Основная услуга:{' '}
+                    <Text as="span" fontWeight="semibold">
+                      {formatCurrency(item.itemPrice)}
+                    </Text>
+                  </Text>
+                  {item.groupTotal !== item.itemPrice && (
+                    <Text>
+                      Доп. услуги:{' '}
+                      <Text as="span" fontWeight="semibold">
+                        {formatCurrency(item.groupTotal - item.itemPrice)}
+                      </Text>
+                    </Text>
+                  )}
+                </Stack>
+              </Stack>
+              <Stack align="flex-end" gap={0}>
+                <Text fontSize="sm" fontWeight="bold" color="blue.700">
+                  {formatCurrency(item.groupTotal)}
+                </Text>
+                <Accordion.ItemIndicator>
+                  <LuChevronDown />
+                </Accordion.ItemIndicator>
+              </Stack>
+            </Stack>
+          </Accordion.ItemTrigger>
+
+          <Accordion.ItemContent p={3} pt={0}>
+            <Stack gap={2} ml={2}>
+              {item.subGroups?.map((subItem) => renderSubItem(subItem, level + 1))}
+            </Stack>
+          </Accordion.ItemContent>
+        </Accordion.Item>
+      </Accordion.Root>
     )
   }, [])
+
+  const renderMainGroup = useCallback(
+    (group: GroupItem) => {
+      return (
+        <Accordion.Root
+          key={group.id}
+          collapsible
+          variant="enclosed"
+          borderRadius={12}
+          overflow="hidden"
+          boxShadow="md"
+        >
+          <Accordion.Item value={group.id.toString()}>
+            <Accordion.ItemTrigger
+              p={4}
+              bg="blue.50"
+              borderBottomWidth={1}
+              borderBottomColor="blue.100"
+              _hover={{ bg: 'blue.100' }}
+            >
+              <Stack direction="row" justify="space-between" align="center" width="100%">
+                <Text fontSize="lg" fontWeight="bold" color="blue.900">
+                  {group.label}
+                </Text>
+                <Stack direction="row" align="center" gap={3}>
+                  <Text fontSize="lg" fontWeight="bold" color="blue.800">
+                    {formatCurrency(group.groupTotal)}
+                  </Text>
+                  <Accordion.ItemIndicator>
+                    <LuChevronDown />
+                  </Accordion.ItemIndicator>
+                </Stack>
+              </Stack>
+            </Accordion.ItemTrigger>
+
+            <Accordion.ItemContent p={4} bg="white">
+              <Stack gap={2}>{group.subGroups?.map((subItem) => renderSubItem(subItem, 0))}</Stack>
+            </Accordion.ItemContent>
+          </Accordion.Item>
+        </Accordion.Root>
+      )
+    },
+    [renderSubItem]
+  )
 
   return (
     <>
       <StepHeader />
-      <Stack gap={5}>
-        <Stack gap={3}>
-          {groups?.map((group) => (
-            <Stack gap={2} key={group.id}>
-              <Text fontSize="xl" fontWeight="bold">
-                {group.label}
-              </Text>
-              <List.Root>{group.subGroups?.map(renderItem)}</List.Root>
-              <Text>
-                Общая стоимость в категории "{group.label}": {formatCurrency(group.groupTotal)}
-              </Text>
-            </Stack>
-          ))}
-        </Stack>
+      <Stack gap={4}>
+        {groups?.map(renderMainGroup)}
 
-        <Stack gap={1}>
-          <Text>Итого:</Text>
-          <Text>{formatCurrency(total)}</Text>
+        <Stack
+          gap={2}
+          align="flex-end"
+          p={4}
+          borderRadius={12}
+          bg="blue.50"
+          boxShadow="md"
+          borderWidth={2}
+          borderColor="blue.200"
+        >
+          <Text fontSize="lg" color="gray.700" fontWeight="medium">
+            Итого:
+          </Text>
+          <Text fontSize="2xl" fontWeight="bold" color="blue.900">
+            {formatCurrency(total)}
+          </Text>
         </Stack>
       </Stack>
-      <Button size="xl" onClick={() => nextStep()} colorPalette="blue" variant="solid">
-        <Box width="100%">Сохранить</Box> <LuArrowRight />
+
+      <Button size="xl" onClick={() => nextStep()} colorPalette="blue" variant="solid" mt={6}>
+        <Box width="100%">Сохранить</Box>
+        <LuArrowRight />
       </Button>
     </>
   )

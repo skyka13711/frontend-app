@@ -5,22 +5,25 @@ $selectedAdditionalOptions.on(toggleAdditionalOption, (state, { groupId, optionI
   const newState = { ...state }
   const group = newState[groupId] || []
   const exists = group.includes(optionId)
+
+  const removeSubTree = (id: string) => {
+    if (newState[id]) {
+      newState[id].forEach(removeSubTree)
+      delete newState[id]
+    }
+  }
+
   let nextGroup: string[]
   if (exists) {
-    const removeSubThree = (id: string) => {
-      if (newState[id]) {
-        newState[id].forEach(removeSubThree)
-        delete newState[id]
-      }
-    }
-    removeSubThree(optionId)
+    removeSubTree(optionId)
     nextGroup = group.filter((id) => id !== optionId)
   } else {
     nextGroup = [...group, optionId]
   }
+
   if (nextGroup.length === 0) {
-    delete newState[groupId]
-    return newState
+    const { [groupId]: _, ...rest } = newState
+    return rest
   }
   return { ...newState, [groupId]: nextGroup }
 })
