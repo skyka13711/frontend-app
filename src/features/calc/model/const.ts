@@ -16,7 +16,7 @@ export const pricesMock: Prices = {
 const subOptionsMock: ServiceOption[] = [
   {
     id: 'smart_meters_1',
-    label: 'Умные счетчики (ХВС, электроэнергия)',
+    label: 'Умные счетчики',
     subOptions: [
       {
         id: 'smart_meters_1_1',

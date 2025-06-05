@@ -2,10 +2,10 @@ import { memo } from 'react'
 import { useUnit } from 'effector-react'
 import { Box, Stack } from '@chakra-ui/react'
 
-import { BaseInfo, SetupAdditionalService } from '../container'
+import { BaseInfo, SetupAdditionalService, Total } from '../container'
 import { $step } from '../../model/private'
 
-const STEPS = [<BaseInfo />, <SetupAdditionalService />, <SetupAdditionalService />, <SetupAdditionalService />]
+const STEPS = [<BaseInfo />, <SetupAdditionalService />, <Total />, <SetupAdditionalService />]
 
 export const Calc = memo(() => {
   const step = useUnit($step)

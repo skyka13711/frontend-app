@@ -7,14 +7,14 @@ $selectedAdditionalOptions.on(toggleAdditionalOption, (state, { groupId, optionI
   const exists = group.includes(optionId)
   let nextGroup: string[]
   if (exists) {
-    nextGroup = group.filter((id) => id !== optionId)
     const removeSubThree = (id: string) => {
       if (newState[id]) {
         newState[id].forEach(removeSubThree)
         delete newState[id]
       }
     }
-    group.forEach(removeSubThree)
+    removeSubThree(optionId)
+    nextGroup = group.filter((id) => id !== optionId)
   } else {
     nextGroup = [...group, optionId]
   }

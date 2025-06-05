@@ -15,7 +15,7 @@ export const ServiceItem = ({ onToggle, options, selected, title, groupId }: Pro
   const renderList = useCallback(
     (items: ServiceOption[], parentId?: string) => {
       return (
-        <Stack gap={4} width="100%" ml={parentId ? 6 : 0}>
+        <Stack gap={4} ml={parentId ? 6 : 0}>
           {items.map((option) => {
             const isSelected = Boolean(selected[parentId || groupId]?.includes(option.id))
             return (

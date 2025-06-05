@@ -56,7 +56,7 @@ const $flatOptionsList = $additionalServices.map((services) => {
   return services.flatMap((g) => g.options.map(mapOptions)).flat()
 })
 
-export const $groupCost = combine(
+export const $groupsCost = combine(
   {
     prices: $prices,
     form: baseInfoForm.$values,
@@ -89,26 +89,25 @@ export const $groupCost = combine(
     }
 
     const getGroupItem = (itemId: string): GroupItem => {
-      const item = flatOptionsList.find((g) => g.id === itemId)
+      const item = additionalServices.find((g) => g.id === itemId) || flatOptionsList.find((g) => g.id === itemId)
       const hasChildren = additionalOptions[itemId] && additionalOptions[itemId].length > 0
+      const itemPrice = item && Object.hasOwn(item, 'price') ? (item as any).price : 0
+
       return {
         id: itemId,
         label: item?.label || '',
-        itemPrice: item?.price || 0,
-        groupTotal: calcGroupCost(itemId),
+        itemPrice: itemPrice,
+        groupTotal: calcGroupCost(itemId) + itemPrice,
         subGroups: hasChildren ? additionalOptions[itemId]!.map(getGroupItem) : undefined
       }
     }
 
-    const result = groupsId.map(getGroupItem)
+    const result = groupsId.map(getGroupItem).filter((group) => group.groupTotal > 0)
     return result
   }
 )
 
-export const $totalCost = $groupCost.map((groups) => {
+export const $totalCost = $groupsCost.map((groups) => {
   if (!groups) return 0
-  return groups.reduce((total, group) => {
-    const groupTotal = group.groupTotal + group.itemPrice
-    return total + groupTotal
-  }, 0)
+  return groups.reduce((total, group) => total + group.groupTotal, 0)
 })
