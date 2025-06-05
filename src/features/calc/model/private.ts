@@ -25,19 +25,19 @@ export const baseInfoForm = createForm<BaseInfoFormFields>({
   domain: d,
   fields: {
     area: {
-      init: '10',
+      init: '',
       rules: [rules.required('Общая жилая (продаваемая) площадь обязательна')]
     },
     floors: {
-      init: '10',
+      init: '',
       rules: [rules.required('Количество этажей обязательно')]
     },
     sections: {
-      init: '10',
+      init: '',
       rules: [rules.required('Количество секций обязательно')]
     },
     apartments: {
-      init: '10',
+      init: '',
       rules: [rules.required('Количество квартир обязательно')]
     },
     plumbingType: {
