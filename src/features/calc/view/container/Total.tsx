@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react'
 import { Box, Button, Stack, Text, Accordion } from '@chakra-ui/react'
-import { LuArrowRight, LuChevronDown } from 'react-icons/lu'
+import { LuArrowRight, LuChevronDown, LuDownload } from 'react-icons/lu'
 import { useUnit } from 'effector-react'
 
 import { StepHeader } from './StepHeader'
@@ -150,7 +150,7 @@ export const Total = memo(() => {
 
       <Button size="xl" onClick={() => nextStep()} colorPalette="blue" variant="solid" mt={6}>
         <Box width="100%">Сохранить</Box>
-        <LuArrowRight />
+        <LuDownload />
       </Button>
     </>
   )
