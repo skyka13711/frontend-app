@@ -13,7 +13,7 @@ type Props = {
 
 export const ServiceItem = ({ onToggle, options, selected, title, groupId }: Props) => {
   const renderList = useCallback(
-    (items: ServiceOption[], parentId?: string) => {
+    (items: ServiceOption[], parentId?: string, isParentSelected?: boolean) => {
       return (
         <Stack gap={4} ml={parentId ? 6 : 0}>
           {items.map((option) => {
@@ -24,6 +24,7 @@ export const ServiceItem = ({ onToggle, options, selected, title, groupId }: Pro
                   cursor="pointer"
                   onCheckedChange={() => onToggle({ groupId: parentId || groupId, optionId: option.id })}
                   checked={isSelected}
+                  disabled={Boolean(parentId && !isParentSelected)}
                   variant="solid"
                 >
                   <Checkbox.HiddenInput />
@@ -32,9 +33,8 @@ export const ServiceItem = ({ onToggle, options, selected, title, groupId }: Pro
                     {option.label}
                   </Checkbox.Label>
                 </Checkbox.Root>
-                {isSelected &&
-                  Boolean(option.subOptions?.length) &&
-                  renderList(option.subOptions as ServiceOption[], option.id)}
+                {Boolean(option.subOptions?.length) &&
+                  renderList(option.subOptions as ServiceOption[], option.id, isSelected)}
               </React.Fragment>
             )
           })}
