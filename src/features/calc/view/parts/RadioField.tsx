@@ -26,7 +26,7 @@ export const RadioField = <T extends string>({ isInvalid, label, onChange, optio
         gap={6}
       >
         {options.map((option) => (
-          <RadioGroup.Item key={option.value} value={option.value}>
+          <RadioGroup.Item cursor="pointer" key={option.value} value={option.value}>
             <RadioGroup.ItemHiddenInput />
             <RadioGroup.ItemIndicator />
             <RadioGroup.ItemText>{option.label}</RadioGroup.ItemText>

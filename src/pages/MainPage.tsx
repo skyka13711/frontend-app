@@ -9,7 +9,7 @@ export const MainPage = memo(() => {
   return (
     <Container flexGrow={1} display="flex" flexDirection="column">
       <Header />
-      <Box width="100%">
+      <Box width="100%" maxWidth={480} mx={'auto'}>
         <Calc />
       </Box>
       <Footer />

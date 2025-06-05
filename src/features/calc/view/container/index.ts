@@ -1,1 +1,2 @@
-export * from './BaseInfoForm'
+export * from './BaseInfo'
+export * from './SetupAdditionalService'
