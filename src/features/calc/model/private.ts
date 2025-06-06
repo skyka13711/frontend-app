@@ -3,22 +3,22 @@ import { createForm } from 'effector-forms'
 
 import { rules } from '@/lib/validators'
 
-import { BaseInfoFormFields, GroupItem, PlumbingType, Prices, ServiceOption } from './types'
+import { AdditionalService, BaseInfoFormFields, GroupItem, PlumbingType, Prices } from './types'
 import { additionalServiceMock, pricesMock } from './const'
+import { createOptionsMap, getVisibleServices } from './helpers'
 
-export const STEP_COUNT = 4 // Total number of steps in the form
 const d = createDomain('calc')
 
-// Units
 export const $step = d.store<number>(1)
+export const $prices = d.store<Prices | null>(pricesMock)
+export const $additionalServices = d.store(additionalServiceMock)
+export const $selectedAdditionalOptions = d.store<Record<string, string[]>>({})
+
 export const { nextStep, prevStep } = createApi($step, {
   nextStep: (state) => state + 1,
   prevStep: (state) => state - 1
 })
 
-export const $prices = d.store<Prices | null>(pricesMock)
-export const $additionalServices = d.store(additionalServiceMock)
-export const $selectedAdditionalOptions = d.store<Record<string, string[]>>({})
 export const toggleAdditionalOption = d.event<{ groupId: string; optionId: string }>()
 
 export const baseInfoForm = createForm<BaseInfoFormFields>({
@@ -51,63 +51,69 @@ export const baseInfoForm = createForm<BaseInfoFormFields>({
   }
 })
 
-// derived stores
-const $flatOptionsList = $additionalServices.map((services) => {
-  const mapOptions = (option: ServiceOption): ServiceOption[] | ServiceOption => {
-    if (option.subOptions) return [option, ...option.subOptions.flatMap(mapOptions)]
-    return option
+export const $visibleServices = combine(
+  {
+    services: $additionalServices,
+    plumbingType: baseInfoForm.fields.plumbingType.$value
+  },
+  ({ services, plumbingType }): AdditionalService[] | null => {
+    if (!services) return null
+
+    return getVisibleServices(services, plumbingType)
   }
-  return services.flatMap((g) => g.options.map(mapOptions)).flat()
+)
+
+const $optionsMap = $visibleServices.map((services) => {
+  if (!services) return null
+  return createOptionsMap(services)
 })
 
 export const $groupsCost = combine(
   {
     prices: $prices,
-    form: baseInfoForm.$values,
-    additionalOptions: $selectedAdditionalOptions,
-    additionalServices: $additionalServices,
-    flatOptionsList: $flatOptionsList
+    formValues: baseInfoForm.$values,
+    selectedOptions: $selectedAdditionalOptions,
+    services: $additionalServices,
+    optionsMap: $optionsMap
   },
-  ({ prices, form, additionalOptions, additionalServices, flatOptionsList }) => {
-    if (!prices) return null
-    if (!form.area || !form.floors || !form.sections || !form.apartments) return null
+  ({ prices, selectedOptions, services, optionsMap }) => {
+    if (!prices || !optionsMap) return null
 
-    // const areaCost = parseFloat(form.area) * prices.area
-    // const floorsCost = parseInt(form.floors, 10) * prices.floors
-    // const sectionsCost = parseInt(form.sections, 10) * prices.sections
-    // const apartmentsCost = parseInt(form.apartments, 10) * prices.apartments
-    // const plumbingCost = prices.plumbingType[form.plumbingType]
+    const calculateGroupCost = (groupId: string): number => {
+      const selectedIds = selectedOptions[groupId]
+      if (!selectedIds?.length) return 0
 
-    const groupsId = additionalServices.map((g) => g.id)
-
-    const calcGroupCost = (groupId: string): number => {
-      let groupCost = 0
-      const selectedOptions = additionalOptions[groupId]
-      if (!selectedOptions) return groupCost
-      selectedOptions.forEach((id) => {
-        groupCost += calcGroupCost(id)
-        const item = flatOptionsList.find((g) => g.id === id)
-        groupCost += item?.price || 0
-      })
-      return groupCost
+      return selectedIds.reduce((total, optionId) => {
+        const childCost = calculateGroupCost(optionId)
+        const optionPrice = optionsMap[optionId]?.price || 0
+        return total + childCost + optionPrice
+      }, 0)
     }
 
-    const getGroupItem = (itemId: string): GroupItem => {
-      const item = additionalServices.find((g) => g.id === itemId) || flatOptionsList.find((g) => g.id === itemId)
-      const hasChildren = additionalOptions[itemId] && additionalOptions[itemId].length > 0
-      const itemPrice = item && Object.hasOwn(item, 'price') ? (item as any).price : 0
+    const createGroupItem = (itemId: string): GroupItem | null => {
+      const item = services.find((service) => service.id === itemId) || optionsMap[itemId]
+
+      if (!item) return null
+
+      const childrenIds = selectedOptions[itemId]
+      const hasChildren = childrenIds && childrenIds.length > 0
+      const itemPrice = 'price' in item ? item.price : 0
+      const groupTotal = calculateGroupCost(itemId) + itemPrice
 
       return {
         id: itemId,
-        label: item?.label || '',
-        itemPrice: itemPrice,
-        groupTotal: calcGroupCost(itemId) + itemPrice,
-        subGroups: hasChildren ? additionalOptions[itemId]!.map(getGroupItem) : undefined
+        label: item.label || '',
+        itemPrice,
+        groupTotal,
+        subGroups: hasChildren
+          ? childrenIds.map(createGroupItem).filter((item): item is GroupItem => item !== null)
+          : undefined
       }
     }
 
-    const result = groupsId.map(getGroupItem).filter((group) => group.groupTotal > 0)
-    return result
+    return services
+      .map((service) => createGroupItem(service.id))
+      .filter((item): item is GroupItem => item !== null && item.groupTotal > 0)
   }
 )
 

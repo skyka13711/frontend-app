@@ -17,6 +17,7 @@ export interface Prices {
   floors: number
   sections: number
   apartments: number
+  apartmentsOnFloor: number
   plumbingType: Record<PlumbingType, number>
 }
 
@@ -24,6 +25,7 @@ export interface ServiceOption {
   id: string
   label: string
   price: number
+  plumbingType?: PlumbingType
   subOptions?: ServiceOption[]
 }
 

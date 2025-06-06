@@ -5,6 +5,7 @@ export const pricesMock: Prices = {
   floors: 40000, // цена за 1 этаж
   sections: 25000, // цена за 1 секцию
   apartments: 12000, // цена за 1 квартиру
+  apartmentsOnFloor: 1000,
   plumbingType: {
     [PlumbingType.Vertical]: 85000,
     [PlumbingType.Collector]: 115000
@@ -19,16 +20,19 @@ const subOptionsMock: ServiceOption[] = [
       {
         id: 'smart_meters_1_1',
         label: 'Холодная вода',
+        plumbingType: PlumbingType.Collector,
         price: 3000
       },
       {
         id: 'smart_meters_1_2',
         label: 'Горячая вода',
+        plumbingType: PlumbingType.Vertical,
         price: 4000
       },
       {
         id: 'smart_meters_1_3',
         label: 'Электроэнергия',
+        plumbingType: PlumbingType.Vertical,
         price: 5000
       }
     ],
@@ -38,6 +42,7 @@ const subOptionsMock: ServiceOption[] = [
     id: 'video_intercom_1',
     label: 'Домофония с видеопотоком',
     subOptions: [],
+    plumbingType: PlumbingType.Vertical,
     price: 11000
   }
 ]

@@ -3,8 +3,8 @@ import { Box, Button, Stack } from '@chakra-ui/react'
 import { LuArrowRight } from 'react-icons/lu'
 
 import {
-  $additionalServices,
   $selectedAdditionalOptions,
+  $visibleServices,
   nextStep,
   prevStep,
   toggleAdditionalOption
@@ -12,14 +12,14 @@ import {
 import { ServiceItem, StepHeader } from '../parts'
 
 export const SetupAdditionalService = () => {
-  const services = useUnit($additionalServices)
+  const services = useUnit($visibleServices)
   const handleToggle = useUnit(toggleAdditionalOption)
   const selectedOptions = useUnit($selectedAdditionalOptions)
   return (
     <>
       <StepHeader onGoBack={prevStep} title="Расчет стоимости АСУЗ" />
       <Stack height="100%">
-        {services.map(({ id, label, options }) => {
+        {services?.map(({ id, label, options }) => {
           return (
             <ServiceItem
               onToggle={handleToggle}
