@@ -9,6 +9,7 @@ type Props = {
   onGoBack?: () => void
   buttonIcon: React.ReactNode
   buttonType?: 'solid' | 'surface'
+  gap?: number
 }
 
 type HeaderProps = {
@@ -41,12 +42,15 @@ export const FormLayout = ({
   buttonIcon,
   onButtonClick,
   onGoBack,
-  buttonType
+  buttonType,
+  gap
 }: Props & React.PropsWithChildren) => {
   return (
     <>
       <Header onGoBack={onGoBack} title={title} />
-      <Stack height="100%">{children}</Stack>
+      <Stack gap={gap} height="100%">
+        {children}
+      </Stack>
 
       <Button size="xl" onClick={onButtonClick} colorPalette="blue" variant={buttonType || 'solid'}>
         <Box width="100%">{buttonLabel}</Box> {buttonIcon}

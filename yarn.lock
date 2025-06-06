@@ -8293,6 +8293,7 @@ __metadata:
     terser-webpack-plugin: "npm:5.3.14"
     ts-node: "npm:10.9.2"
     typescript: "npm:5.8.3"
+    use-mask-input: "npm:^3.4.2"
     webpack: "npm:5.99.9"
     webpack-cli: "npm:6.0.1"
     webpack-dev-server: "npm:5.2.1"
@@ -9713,6 +9714,16 @@ __metadata:
   dependencies:
     punycode: "npm:^2.1.0"
   checksum: 10c0/4ef57b45aa820d7ac6496e9208559986c665e49447cb072744c13b66925a362d96dd5a46c4530a6b8e203e5db5fe849369444440cb22ecfc26c679359e5dfa3c
+  languageName: node
+  linkType: hard
+
+"use-mask-input@npm:^3.4.2":
+  version: 3.4.2
+  resolution: "use-mask-input@npm:3.4.2"
+  peerDependencies:
+    react: ">=16.4 || 17 || 18 || 20"
+    react-dom: ">=16.4 || 17 || 18 || 20"
+  checksum: 10c0/53c1aa2b7aa93821c5c49a9af69e41951c31713d6527f1951da86dce02e39529a8b0e2ff5749a9d8cf20c912a639c69a5e2eb0788cceaed157f02c5f22f84a3a
   languageName: node
   linkType: hard
 

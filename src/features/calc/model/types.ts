@@ -2,7 +2,9 @@ export enum Step {
   BaseInfo,
   AdditionalService,
   Total,
-  Save
+  Save,
+  SendToEmail,
+  Contact
 }
 
 export enum PlumbingType {
@@ -15,7 +17,7 @@ export interface BaseInfoFormFields {
   floors: string
   sections: string
   apartments: string
-  roomOnFloor: string
+  apartmentsOnFloor: string
   plumbingType: PlumbingType
 }
 

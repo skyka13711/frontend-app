@@ -1,21 +1,19 @@
 import { Field, NumberInput } from '@chakra-ui/react'
+import { ConnectedField } from 'effector-forms'
 
 type Props = {
-  isValid: boolean
+  field: ConnectedField<string>
   label: string
-  value: string
-  errorText?: string
-  onChange: (value: string) => void
 }
 
-export const NumberField = ({ isValid, label, onChange, value, errorText }: Props) => {
+export const NumberField = ({ label, field }: Props) => {
   return (
-    <Field.Root invalid={isValid}>
+    <Field.Root invalid={field.hasError()}>
       <Field.Label fontWeight="semibold">{label}</Field.Label>
-      <NumberInput.Root min={0} width="100%" value={value} onValueChange={(e) => onChange(e.value)}>
+      <NumberInput.Root min={0} width="100%" value={field.value} onValueChange={(e) => field.onChange(e.value)}>
         <NumberInput.Input fontSize={16} placeholder="10" />
       </NumberInput.Root>
-      <Field.ErrorText>{errorText}</Field.ErrorText>
+      <Field.ErrorText>{field.firstError?.errorText}</Field.ErrorText>
     </Field.Root>
   )
 }

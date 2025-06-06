@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { useUnit } from 'effector-react'
 import { Box, Stack } from '@chakra-ui/react'
 
-import { BaseInfo, SaveResult, SetupAdditionalService, Total } from '../container'
+import { BaseInfo, SaveResult, SendToEmail, SetupAdditionalService, Total } from '../container'
 import { $step } from '../../model/private'
 import { Step } from '../../model/types'
 
@@ -10,7 +10,9 @@ const STEPS = {
   [Step.BaseInfo]: <BaseInfo />,
   [Step.AdditionalService]: <SetupAdditionalService />,
   [Step.Total]: <Total />,
-  [Step.Save]: <SaveResult />
+  [Step.Save]: <SaveResult />,
+  [Step.SendToEmail]: <SendToEmail />,
+  [Step.Contact]: null
 }
 
 export const Calc = memo(() => {

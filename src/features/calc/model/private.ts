@@ -9,7 +9,7 @@ import { createOptionsMap, getVisibleServices } from './helpers'
 
 const d = createDomain('calc')
 
-export const $step = d.store<Step>(Step.AdditionalService)
+export const $step = d.store<Step>(Step.BaseInfo)
 export const $prices = d.store<Prices | null>(pricesMock)
 export const $additionalServices = d.store(additionalServiceMock)
 export const $selectedAdditionalOptions = d.store<Record<string, string[]>>({})
@@ -37,7 +37,7 @@ export const baseInfoForm = createForm<BaseInfoFormFields>({
       init: '',
       rules: [rules.required('Количество квартир обязательно')]
     },
-    roomOnFloor: {
+    apartmentsOnFloor: {
       init: '',
       rules: [rules.required('Количество квартир обязательно')]
     },
@@ -117,4 +117,27 @@ export const $groupsCost = combine(
 export const $totalCost = $groupsCost.map((groups) => {
   if (!groups) return 0
   return groups.reduce((total, group) => total + group.groupTotal, 0)
+})
+
+export const sendToEmailForm = createForm({
+  domain: d,
+  fields: {
+    email: {
+      init: '',
+      rules: [rules.required('email обательное поле'), rules.email()]
+    },
+    fio: {
+      init: ''
+    },
+    company: {
+      init: ''
+    },
+    position: {
+      init: ''
+    },
+    phone: {
+      init: '',
+      rules: [rules.phone()]
+    }
+  }
 })
