@@ -1,13 +1,13 @@
 import { memo, useCallback } from 'react'
-import { Box, Button, Stack, Text, Accordion } from '@chakra-ui/react'
+import { Box, Stack, Text, Accordion } from '@chakra-ui/react'
 import { LuChevronDown, LuDownload } from 'react-icons/lu'
 import { useUnit } from 'effector-react'
 
 import { formatCurrency } from '@/lib/formatCurrency'
 
-import { StepHeader } from '../parts'
 import { $groupsCost, $totalCost, nextStep, prevStep } from '../../model/private'
 import { GroupItem } from '../../model/types'
+import { FormLayout } from '../parts'
 
 export const Total = memo(() => {
   const groups = useUnit($groupsCost)
@@ -125,34 +125,32 @@ export const Total = memo(() => {
   )
 
   return (
-    <>
-      <StepHeader onGoBack={prevStep} title="Сохранить" />
-      <Stack gap={4} height="100%">
-        {groups?.map(renderMainGroup)}
+    <FormLayout
+      onButtonClick={nextStep}
+      onGoBack={prevStep}
+      buttonLabel="Сохранить"
+      buttonIcon={<LuDownload />}
+      title="Сохранить"
+    >
+      {groups?.map(renderMainGroup)}
 
-        <Stack
-          gap={2}
-          align="flex-end"
-          p={4}
-          borderRadius={12}
-          bg="blue.50"
-          boxShadow="md"
-          borderWidth={2}
-          borderColor="blue.200"
-        >
-          <Text fontSize="lg" color="gray.700" fontWeight="medium">
-            Итого:
-          </Text>
-          <Text fontSize="2xl" fontWeight="bold" color="blue.900">
-            {formatCurrency(total)}
-          </Text>
-        </Stack>
+      <Stack
+        gap={2}
+        align="flex-end"
+        p={4}
+        borderRadius={12}
+        bg="blue.50"
+        boxShadow="md"
+        borderWidth={2}
+        borderColor="blue.200"
+      >
+        <Text fontSize="lg" color="gray.700" fontWeight="medium">
+          Итого:
+        </Text>
+        <Text fontSize="2xl" fontWeight="bold" color="blue.900">
+          {formatCurrency(total)}
+        </Text>
       </Stack>
-
-      <Button size="xl" onClick={() => nextStep()} colorPalette="blue" variant="solid" mt={6}>
-        <Box width="100%">Сохранить</Box>
-        <LuDownload />
-      </Button>
-    </>
+    </FormLayout>
   )
 })
