@@ -1,5 +1,5 @@
-import { Configuration, DefinePlugin } from 'webpack'
-import merge from 'webpack-merge'
+import type { Configuration } from 'webpack'
+import { merge } from 'webpack-merge'
 
 import * as path from 'path'
 import { realpathSync } from 'fs'
@@ -7,8 +7,12 @@ import { realpathSync } from 'fs'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 
-import loadersConfig from './webpack.loaders'
-import { envVars } from './envs'
+import loadersConfig from './webpack.loaders.ts'
+import { envVars } from './envs.ts'
+
+import webpack from 'webpack'
+
+const { DefinePlugin } = webpack
 
 const appDirectory = realpathSync(process.cwd())
 

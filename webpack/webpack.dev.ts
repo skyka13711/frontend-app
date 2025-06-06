@@ -1,10 +1,10 @@
-import webpackMerge from 'webpack-merge'
+import { merge } from 'webpack-merge'
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
-import baseConfig from './webpack.base'
-import { envVars } from './envs'
+import baseConfig from './webpack.base.ts'
+import { envVars } from './envs.ts'
 import 'webpack-dev-server'
 
-const config = webpackMerge(baseConfig, {
+const config = merge(baseConfig, {
   mode: 'development',
   plugins: [new ReactRefreshWebpackPlugin()],
   devtool: 'inline-source-map',
