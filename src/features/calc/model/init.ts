@@ -1,5 +1,8 @@
 import { sample } from 'effector'
-import { $selectedAdditionalOptions, baseInfoForm, nextStep, toggleAdditionalOption } from './private'
+import { $selectedAdditionalOptions, $step, baseInfoForm, setStep, toggleAdditionalOption } from './private'
+import { Step } from './types'
+
+$step.on(setStep, (_, step) => step)
 
 $selectedAdditionalOptions.on(toggleAdditionalOption, (state, { groupId, optionId }) => {
   const newState = { ...state }
@@ -30,5 +33,6 @@ $selectedAdditionalOptions.on(toggleAdditionalOption, (state, { groupId, optionI
 
 sample({
   clock: baseInfoForm.formValidated,
-  target: nextStep
+  fn: () => Step.AdditionalService,
+  target: setStep
 })

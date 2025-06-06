@@ -2,10 +2,16 @@ import { memo } from 'react'
 import { useUnit } from 'effector-react'
 import { Box, Stack } from '@chakra-ui/react'
 
-import { BaseInfo, SetupAdditionalService, Total } from '../container'
+import { BaseInfo, SaveResult, SetupAdditionalService, Total } from '../container'
 import { $step } from '../../model/private'
+import { Step } from '../../model/types'
 
-const STEPS = [<BaseInfo />, <SetupAdditionalService />, <Total />, <SetupAdditionalService />]
+const STEPS = {
+  [Step.BaseInfo]: <BaseInfo />,
+  [Step.AdditionalService]: <SetupAdditionalService />,
+  [Step.Total]: <Total />,
+  [Step.Save]: <SaveResult />
+}
 
 export const Calc = memo(() => {
   const step = useUnit($step)
@@ -13,7 +19,7 @@ export const Calc = memo(() => {
   return (
     <Box height="100%" shadow="lg" p={5} borderRadius={16}>
       <Stack direction="column" gap={5} height="100%">
-        {STEPS[step - 1] || null}
+        {STEPS[step] || null}
       </Stack>
     </Box>
   )

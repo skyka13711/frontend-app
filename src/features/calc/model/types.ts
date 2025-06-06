@@ -1,3 +1,10 @@
+export enum Step {
+  BaseInfo,
+  AdditionalService,
+  Total,
+  Save
+}
+
 export enum PlumbingType {
   Vertical = 'Вертикальная',
   Collector = 'Коллекторная горизонтальная'

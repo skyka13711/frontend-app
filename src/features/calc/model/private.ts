@@ -3,21 +3,18 @@ import { createForm } from 'effector-forms'
 
 import { rules } from '@/lib/validators'
 
-import { AdditionalService, BaseInfoFormFields, GroupItem, PlumbingType, Prices } from './types'
+import { AdditionalService, BaseInfoFormFields, GroupItem, PlumbingType, Prices, Step } from './types'
 import { additionalServiceMock, pricesMock } from './const'
 import { createOptionsMap, getVisibleServices } from './helpers'
 
 const d = createDomain('calc')
 
-export const $step = d.store<number>(1)
+export const $step = d.store<Step>(Step.AdditionalService)
 export const $prices = d.store<Prices | null>(pricesMock)
 export const $additionalServices = d.store(additionalServiceMock)
 export const $selectedAdditionalOptions = d.store<Record<string, string[]>>({})
 
-export const { nextStep, prevStep } = createApi($step, {
-  nextStep: (state) => state + 1,
-  prevStep: (state) => state - 1
-})
+export const setStep = d.event<Step>()
 
 export const toggleAdditionalOption = d.event<{ groupId: string; optionId: string }>()
 

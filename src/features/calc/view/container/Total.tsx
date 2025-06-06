@@ -5,8 +5,8 @@ import { useUnit } from 'effector-react'
 
 import { formatCurrency } from '@/lib/formatCurrency'
 
-import { $groupsCost, $totalCost, nextStep, prevStep } from '../../model/private'
-import { GroupItem } from '../../model/types'
+import { $groupsCost, $totalCost, setStep } from '../../model/private'
+import { GroupItem, Step } from '../../model/types'
 import { FormLayout } from '../parts'
 
 export const Total = memo(() => {
@@ -126,11 +126,11 @@ export const Total = memo(() => {
 
   return (
     <FormLayout
-      onButtonClick={nextStep}
-      onGoBack={prevStep}
+      onButtonClick={() => setStep(Step.Save)}
+      onGoBack={() => setStep(Step.AdditionalService)}
       buttonLabel="Сохранить"
       buttonIcon={<LuDownload />}
-      title="Сохранить"
+      title="Расчет стоимости АСУЗ "
     >
       {groups?.map(renderMainGroup)}
 
