@@ -7,9 +7,7 @@ export const pricesMock: Prices = {
   apartments: 12000, // цена за 1 квартиру
   plumbingType: {
     [PlumbingType.Vertical]: 85000,
-    [PlumbingType.Collector]: 115000,
-    [PlumbingType.Standpipe]: 95000,
-    [PlumbingType.Other]: 70000
+    [PlumbingType.Collector]: 115000
   }
 }
 

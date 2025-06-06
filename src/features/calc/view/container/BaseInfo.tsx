@@ -8,10 +8,8 @@ import { NumberField, RadioField, StepHeader } from '../parts'
 import { PlumbingType } from '../../model/types'
 
 const PLUMBING_OPTIONS = [
-  { value: PlumbingType.Vertical, label: 'Вертикальная' },
-  { value: PlumbingType.Collector, label: 'Коллекторная горизонтальная' },
-  { value: PlumbingType.Standpipe, label: 'Стояковая с байпасами' },
-  { value: PlumbingType.Other, label: 'Другое' }
+  { value: PlumbingType.Vertical, label: 'Вертикальная (стояковая)' },
+  { value: PlumbingType.Collector, label: 'Коллекторная горизонтальная' }
 ]
 
 export const BaseInfo = memo(() => {
@@ -36,13 +34,6 @@ export const BaseInfo = memo(() => {
               errorText={fields.area.firstError?.errorText}
             />
             <NumberField
-              isValid={fields.floors.hasError()}
-              label="Количество этажей"
-              value={fields.floors.value}
-              onChange={(v) => fields.floors.onChange(String(v))}
-              errorText={fields.floors.firstError?.errorText}
-            />
-            <NumberField
               isValid={fields.sections.hasError()}
               label="Количество секций"
               value={fields.sections.value}
@@ -56,7 +47,20 @@ export const BaseInfo = memo(() => {
               onChange={(v) => fields.apartments.onChange(String(v))}
               errorText={fields.apartments.firstError?.errorText}
             />
-
+            <NumberField
+              isValid={fields.roomOnFloor.hasError()}
+              label="Количество квартир на этаже"
+              value={fields.roomOnFloor.value}
+              onChange={(v) => fields.roomOnFloor.onChange(String(v))}
+              errorText={fields.roomOnFloor.firstError?.errorText}
+            />
+            <NumberField
+              isValid={fields.floors.hasError()}
+              label="Количество этажей"
+              value={fields.floors.value}
+              onChange={(v) => fields.floors.onChange(String(v))}
+              errorText={fields.floors.firstError?.errorText}
+            />
             <RadioField<PlumbingType>
               isInvalid={fields.plumbingType.hasError()}
               label="Тип разводки ХВС/ГВС"

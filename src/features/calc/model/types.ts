@@ -1,8 +1,6 @@
 export enum PlumbingType {
   Vertical = 'Вертикальная',
-  Collector = 'Коллекторная горизонтальная',
-  Standpipe = 'Стояковая с байпасами',
-  Other = 'Другое'
+  Collector = 'Коллекторная горизонтальная'
 }
 
 export interface BaseInfoFormFields {
@@ -10,6 +8,7 @@ export interface BaseInfoFormFields {
   floors: string
   sections: string
   apartments: string
+  roomOnFloor: string
   plumbingType: PlumbingType
 }
 

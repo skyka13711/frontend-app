@@ -1,6 +1,8 @@
-import { combine, createApi, createDomain, sample } from 'effector'
+import { combine, createApi, createDomain } from 'effector'
 import { createForm } from 'effector-forms'
+
 import { rules } from '@/lib/validators'
+
 import { BaseInfoFormFields, GroupItem, PlumbingType, Prices, ServiceOption } from './types'
 import { additionalServiceMock, pricesMock } from './const'
 
@@ -35,6 +37,10 @@ export const baseInfoForm = createForm<BaseInfoFormFields>({
       rules: [rules.required('Количество секций обязательно')]
     },
     apartments: {
+      init: '',
+      rules: [rules.required('Количество квартир обязательно')]
+    },
+    roomOnFloor: {
       init: '',
       rules: [rules.required('Количество квартир обязательно')]
     },
